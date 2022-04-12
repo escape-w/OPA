@@ -1,0 +1,14 @@
+apiVersion: constraints.gatekeeper.sh/v1beta1
+kind: TrustedRepos
+metadata:
+  name: untrusted-repository
+spec:
+  match:
+    kinds:
+      - apiGroups: ["", "apps", "batch"]
+        kinds: ["Pod", "Job", "CronJob", "ReplicaSet", "Deployment", "StatefulSet", "DaemonSet"]
+    excludedNamespaces: ["kube-system"]
+  parameters:
+    repos:
+      - "docker.io/"
+      - "acrname.azure.io/"

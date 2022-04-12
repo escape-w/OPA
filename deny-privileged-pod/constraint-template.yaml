@@ -1,0 +1,45 @@
+apiVersion: templates.gatekeeper.sh/v1beta1
+kind: ConstraintTemplate
+metadata:
+  name: denyprivilegedpod
+  annotations:
+    description: Pods with privileged containers are not allowed
+spec:
+  crd:
+    spec:
+      names:
+        kind: DenyPrivilegedPod
+  targets:
+    - target: admission.k8s.gatekeeper.sh
+      rego: |
+        package k8sdenyprivilegedpod
+
+        violation[{"msg": msg, "details": {}}] {
+            c := input_containers[_]
+            input_allow_privilege_escalation(c)
+            msg := sprintf("Privilege container is not allowed: %v", [c.name])
+        }
+
+        input_allow_root_container(c) {
+            not has_field(c, "securityContext")
+        }
+        
+        input_allow_privilege_escalation(c) {
+          not c.securityContext.allowPrivilegeEscalation == false
+        }
+        
+        input_allow_privilege_escalation(c) {
+             c.securityContext.privileged == true
+        }
+        
+        input_containers[c] {
+            c := input.review.object.spec.containers[_]
+        }
+        
+        input_containers[c] {
+            c := input.review.object.spec.initContainers[_]
+        }
+        
+        has_field(object, field) = true {
+            object[field]
+        }

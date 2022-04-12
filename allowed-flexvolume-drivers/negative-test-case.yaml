@@ -1,0 +1,26 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: alpine-flexvolume-driver-disallowed
+  labels:
+    app: alpine-flexvolume-driver
+spec:
+  containers:
+  - name: alpine
+    image: alpine:3.13.7
+    command:
+      - /bin/sh
+      - "-c"
+      - "sleep 60m"
+    resources:
+      limits:
+        cpu: "100m"
+        memory: "500Mi"
+    volumeMounts:
+    - mountPath: /test
+      name: test-volume
+      readOnly: true
+  volumes:
+  - name: test-volume
+    flexVolume:
+      driver: "example/testdriver" #"example/lvm"

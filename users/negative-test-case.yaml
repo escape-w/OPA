@@ -1,0 +1,21 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: alpine-users-disallowed
+  labels:
+    app: alpine-users
+spec:
+  securityContext:
+    supplementalGroups:
+      - 250
+    fsGroup: 250
+  containers:
+    - name: alpine
+      image: alpine:3.13.7
+      command:
+        - /bin/sh
+        - "-c"
+        - "sleep 60m"
+      securityContext:
+        runAsUser: 250
+        runAsGroup: 250

@@ -1,0 +1,16 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: alpine-privilege-escalation-allowed
+  labels:
+    app: alpine-privilege-escalation
+spec:
+  containers:
+  - name: alpine
+    image: alpine:3.13.7
+    command:
+        - /bin/sh
+        - "-c"
+        - "sleep 60m"
+    securityContext:
+      allowPrivilegeEscalation: false

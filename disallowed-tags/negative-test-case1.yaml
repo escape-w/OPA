@@ -1,0 +1,13 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: alpine-disallowed-2
+spec:
+  containers:
+  - image: alpine:3.13.7
+      command:
+        - /bin/sh
+        - "-c"
+        - "sleep 60m"
+
+

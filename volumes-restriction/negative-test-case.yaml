@@ -1,0 +1,40 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: alpine-volume-types-disallowed
+  labels:
+    app: alpine-volume-types
+spec:
+  containers:
+  - name: alpine1
+    image: alpine:3.13.7
+    command:
+      - /bin/sh
+      - "-c"
+      - "sleep 60m"
+    resources:
+      limits:
+        cpu: "100m"
+        memory: "500Mi"
+    volumeMounts:
+    - mountPath: /cache
+      name: cache-volume
+  - name: alpine2
+    image: alpine:3.13.7
+    command:
+      - /bin/sh
+      - "-c"
+      - "sleep 60m"
+    resources:
+      limits:
+        cpu: "100m"
+        memory: "500Mi"
+    volumeMounts:
+    - mountPath: /cache2
+      name: demo-vol
+  volumes:
+  - name: cache-volume
+    hostPath:
+      path: /tmp # directory location on host
+  - name: demo-vol
+    emptyDir: {}

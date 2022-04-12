@@ -1,0 +1,27 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: alpine-deployment
+  labels:
+    app: alpine
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: alpine
+  template:
+    metadata:
+      labels:
+        app: alpine
+    spec:
+      containers:
+        - name: alpine
+          image: docker.io/alpine:3.13.7
+          command:
+            - /bin/sh
+            - "-c"
+            - "sleep 60m"
+          resources:
+            limits:
+              cpu: "100m"
+              memory: "30Mi"

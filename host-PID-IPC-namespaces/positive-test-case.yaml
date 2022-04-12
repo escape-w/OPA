@@ -1,0 +1,20 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: alpine-host-namespace-allowed
+  labels:
+    app: alpine-host-namespace
+spec:
+  hostPID: false
+  hostIPC: false
+  containers:
+  - name: alpine
+    image: alpine:3.13.7
+    command:
+      - /bin/sh
+      - "-c"
+      - "sleep 60m"
+    resources:
+      limits:
+        cpu: "100m"
+        memory: "500Mi"

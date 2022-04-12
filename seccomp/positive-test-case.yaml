@@ -1,0 +1,16 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: alpine-seccomp-allowed
+  annotations:
+    container.seccomp.security.alpha.kubernetes.io/nginx: runtime/default
+  labels:
+    app: alpine-seccomp
+spec:
+  containers:
+  - name: alpine
+    image: alpine:3.13.7
+      command:
+        - /bin/sh
+        - "-c"
+        - "sleep 60m"

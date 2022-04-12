@@ -1,0 +1,37 @@
+apiVersion: templates.gatekeeper.sh/v1beta1
+kind: ConstraintTemplate
+metadata:
+  name: trustedrepospod
+  annotations:
+    description: Container images must belong to whitelisted/trusted repositories
+spec:
+  crd:
+    spec:
+      names:
+        kind: TrustedReposPod
+      validation:
+        openAPIV3Schema:
+          type: object
+          properties:
+            repos:
+              type: array
+              items:
+                type: string
+  targets:
+    - target: admission.k8s.gatekeeper.sh
+      rego: |
+        package k8strustedrepospod
+
+        violation[{"msg": msg}] {
+          container := input.review.object.spec.containers[_]
+          satisfied := [good | repo = input.parameters.repos[_] ; good = startswith(container.image, repo)]
+          not any(satisfied)
+          msg := sprintf("Container '%v' has untrusted image repository '%v'. Trusted repositories: '%v'", [container.name, container.image, input.parameters.repos])
+        }
+
+        violation[{"msg": msg}] {
+          container := input.review.object.spec.initContainers[_]
+          satisfied := [good | repo = input.parameters.repos[_] ; good = startswith(container.image, repo)]
+          not any(satisfied)
+          msg := sprintf("Init Container '%v' has untrusted image repository '%v'. Trusted repositories: '%v'", [container.name, container.image, input.parameters.repos])
+        }

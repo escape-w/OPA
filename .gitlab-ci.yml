@@ -1,0 +1,15 @@
+stages:
+- applyingPolicy
+
+bash:
+  stage: applyingPolicy
+  image: alpine:3.7
+  script:
+    - apk update  && apk add --no-cache bash
+    - apk update  && apk add --no-cache curl
+    - curl -LO https://storage.googleapis.com/kubernetes-release/release/$(curl -s https://storage.googleapis.com/kubernetes-release/release/stable.txt)/bin/linux/amd64/kubectl
+    - chmod +x ./kubectl && mv ./kubectl /usr/local/bin/kubectl
+    - mkdir -p $HOME/.kube
+    - echo -n "$KUBE_CONFIG" > $HOME/.kube/config
+    - chmod +x ./applyPolicy.ksh
+    - bash ./applyPolicy.ksh $SECURITY_STANDARD

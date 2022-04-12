@@ -1,0 +1,26 @@
+apiVersion: v1
+kind: Pod
+metadata:
+    name: alpine-selinux-disallowed
+    labels:
+        app: alpine-selinux
+spec:
+  containers:
+  - name: alpine
+    image: alpine:3.13.7
+    command:
+      - /bin/sh
+      - "-c"
+      - "sleep 60m"
+    resources:
+      limits:
+        cpu: "100m"
+        memory: "500Mi"
+    securityContext:
+      seLinuxOptions:
+        level: s0:c123,c456
+        user: sysadm_u
+        role: object_r
+        type: svirt_sandbox_file_t
+
+

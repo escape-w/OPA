@@ -1,0 +1,6 @@
+apiVersion: constraints.gatekeeper.sh/v1beta1
+kind: UniqueServiceSelector
+metadata:
+  name: unique-service-selector
+  labels:
+    owner: admin.agilebank.demo

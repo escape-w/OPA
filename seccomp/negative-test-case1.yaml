@@ -1,0 +1,17 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: alpine-seccomp-disallowed2
+  annotations:
+    seccomp.security.alpha.kubernetes.io/pod: unconfined
+  labels:
+    app: alpine-seccomp
+spec:
+  containers:
+  - name: alpine
+    image: alpine:3.13.7
+      command:
+        - /bin/sh
+        - "-c"
+        - "sleep 60m"
+
