@@ -13,3 +13,6 @@ There are various aspects in kubernetes which should be taken care of, following
 ## Configuration Override
 - [ ] Enforce ingress uniqueness
 - [ ] Enforce service selector uniqueness
+
+More info
+https://appvia.github.io/psp-migration/
